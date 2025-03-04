@@ -11,7 +11,7 @@ A simple and user-friendly web application that converts Google Drive shareable 
 
 ## Demo
 
-Check out the live demo: [Google Drive Link Converter](https://msprimetechservices.blogspot.com)
+Check out the live demo: [Google Drive Link Converter](https://ms-prime-tech-services.github.io/GDrive/)
 
 ## How It Works
 
