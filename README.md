@@ -78,7 +78,7 @@ Developed by [MS Prime Tech Services](https://msprimetechservices.blogspot.com).
 - **Muhammad Saad**
 
 ### Co-Founder:
-- **Mehak Kashif**
+- **Ali Raza Wattoo**
 
 ## Contact
 
