@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Drive Link Converter</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Google Sans', Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #202124;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow-x: hidden;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: #ffffff;
+            padding: 20px;
+            text-align: center;
+            width: 100%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin: 0;
+            color: #1a73e8;
+            font-weight: 500;
+        }
+
+        /* Main Content Styles */
+        main {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        p {
+            font-size: 1rem;
+            margin-bottom: 20px;
+            color: #5f6368;
+        }
+
+        a {
+            color: #1a73e8;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #1557b3;
+        }
+
+        /* Input and Button Styles */
+        input {
+            width: 100%;
+            max-width: 600px;
+            padding: 12px 20px;
+            font-size: 1rem;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            outline: none;
+            box-sizing: border-box;
+            background-color: #ffffff;
+            color: #202124;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        input::placeholder {
+            color: #9aa0a6;
+        }
+
+        input:focus {
+            border-color: #1a73e8;
+            box-shadow: 0 0 8px rgba(26, 115, 232, 0.2);
+        }
+
+        button {
+            padding: 12px 25px;
+            background-color: #1a73e8;
+            color: white;
+            font-size: 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(26, 115, 232, 0.2);
+        }
+
+        button:hover {
+            background-color: #1557b3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(26, 115, 232, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(26, 115, 232, 0.2);
+        }
+
+        /* Result Box Styles */
+        .result-box {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .result-box.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .result-box strong {
+            display: block;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: #1a73e8;
+        }
+
+        .result-box p {
+            margin: 0;
+            font-size: 1rem;
+            color: #5f6368;
+            word-wrap: break-word;
+            word-break: break-word;
+        }
+
+        .copy-button {
+            margin-top: 10px;
+            padding: 8px 16px;
+            background-color: #34a853;
+            color: white;
+            font-size: 0.9rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .copy-button:hover {
+            background-color: #2a8a47;
+            transform: translateY(-2px);
+        }
+
+        .copy-button:active {
+            transform: translateY(0);
+        }
+
+        /* Popup Styles */
+        .popup {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #34a853;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateY(-100%);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .popup.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Footer Styles */
+        footer {
+            background-color: #ffffff;
+            color: #5f6368;
+            padding: 15px;
+            text-align: center;
+            width: 100%;
+            font-size: 0.9rem;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        footer a {
+            color: #1a73e8;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #1557b3;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            header {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            input {
+                max-width: 90%;
+                font-size: 1rem;
+            }
+
+            button {
+                max-width: 90%;
+                font-size: 1rem;
+            }
+
+            footer {
+                padding: 10px;
+            }
+        }
+
+        /* Very small screens (extra mobile) */
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            input, button {
+                font-size: 0.9rem;
+            }
+
+            footer {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Google Drive Link Converter</h1>
+    </header>
+
+    <main>
+        <p>Enter your Google Drive link below to convert it into a direct download link. After generating, <a href="https://iframely.com/try" target="_blank" rel="noopener noreferrer">click here</a> to embed the URL.</p>
+        <input type="text" id="originalLink" placeholder="Enter your Google Drive link" aria-label="Enter your Google Drive link" />
+        <br />
+        <button onclick="convert()" aria-label="Convert Google Drive link">Convert</button>
+
+        <!-- Result Box -->
+        <div class="result-box" id="resultBox">
+            <strong>Converted Link:</strong>
+            <p id="convertedLink">Your converted link will appear here.</p>
+            <button class="copy-button" onclick="copyLink()">Copy Link</button>
+        </div>
+    </main>
+
+    <!-- Popup -->
+    <div class="popup" id="popup">Link copied to clipboard!</div>
+
+    <footer>
+        <p>&copy; 2025 <a href="/">Google Drive Link Converter</a>. All rights reserved. | Created by <a href="https://msprimetechservices.blogspot.com" target="_blank" rel="noopener noreferrer">MS Prime Tech Services</a></p>
+    </footer>
+
+    <script>
+        function convertGoogleDriveLink(originalLink) {
+            if (!originalLink.includes("drive.google.com")) {
+                return "Invalid Google Drive link. Please enter a valid Google Drive URL.";
+            }
+            // Convert Google Drive view link to direct download link
+            let fileId = originalLink.match(/\/d\/([^\/]+)/);
+            if (fileId && fileId[1]) {
+                return `https://drive.google.com/uc?export=download&id=${fileId[1]}`;
+            } else {
+                return "Unable to extract file ID from the link.";
+            }
+        }
+
+        function convert() {
+            const originalLink = document.getElementById("originalLink").value.trim();
+            const outputElement = document.getElementById("convertedLink");
+            const resultBox = document.getElementById("resultBox");
+
+            if (originalLink === "") {
+                outputElement.textContent = "Please enter a Google Drive link.";
+                outputElement.style.color = "#d93025";
+                resultBox.classList.add("visible");
+            } else {
+                const convertedLink = convertGoogleDriveLink(originalLink);
+                outputElement.textContent = convertedLink;
+                outputElement.style.color = "#5f6368";
+                resultBox.classList.add("visible");
+            }
+        }
+
+        function copyLink() {
+            const convertedLink = document.getElementById("convertedLink").textContent;
+            if (convertedLink && !convertedLink.startsWith("Your converted link")) {
+                navigator.clipboard.writeText(convertedLink)
+                    .then(() => {
+                        showPopup("Link copied to clipboard!");
+                    })
+                    .catch(() => {
+                        showPopup("Failed to copy link.");
+                    });
+            }
+        }
+
+        function showPopup(message) {
+            const popup = document.getElementById("popup");
+            popup.textContent = message;
+            popup.classList.add("visible");
+            setTimeout(() => {
+                popup.classList.remove("visible");
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
